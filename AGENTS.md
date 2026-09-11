@@ -13,11 +13,11 @@ Use `cmd /c "npm ..."` or run scripts via `scripts/start.bat`.
 
 ## Stack
 
-- **Runtime:** Node.js v26+ (CommonJS, `"type": "commonjs"`)
+- **Runtime:** Node.js v20+ (CommonJS, `"type": "commonjs"`) — hanya v20+ didukung (setup scripts enforce; fork Baileys butuh v20+)
 - **WhatsApp:** `@nexustechpro/baileys@^2.2.6` (fork of baileys with group status support; aliased as `@whiskeysockets/baileys` in `package.json`)
 - **Media:** ffmpeg (required for video/sticker/download) — binary root-only, must live in **`ffmpeg/bin/`** inside the project (see Gotchas), sharp (image processing)
 - **YouTube/TikTok:** bundled `yt-dlp.exe` in root
-- **AI:** Assistant owner via local 9router proxy (OpenAI-compatible localhost; default model `oc/x-preview-f-free`), `!bot` or free-text.
+- **AI:** Assistant owner via local 9router proxy (OpenAI-compatible localhost; default model `oc/x-preview-f-free`). Trigger = free-text owner (bukan command `!bot` — lihat Gotchas).
 
 ## Environment
 
@@ -91,7 +91,7 @@ Repo has a `.codegraph/` index. Before grep/find when locating or understanding 
 - **Handler pattern:** Each handler is `async function handleX(ctx)` returning `true` if consumed, `false` otherwise. `ctx` contains `{ sock, msg, chatId, isGroup, groupId, senderJid, senderName, body, OWNER_JID, BOT_JID }`
 - **Router registration:** Add handler to `HANDLERS` array and token to `COMMAND_INDEX` in `handlers/router.js`
 - **Owner detection:** `sameUser(senderJid, OWNER_JID)` — JIDs use LID format
-- **Owner vs admin:** group admin via `isGroupAdmin(sock, chatId, jid)` in `utils/jid.js`. Group-admin-only: `!ban` (lokal grup), `!hidetag`, `!del`, `!sw`. Owner-only: `!allowgroup`, `!mode`, `!acc`/`!unacc`, `!reset`, `!bansos`, `!bot`
+- **Owner vs admin:** group admin via `isGroupAdmin(sock, chatId, jid)` in `utils/jid.js`. Group-admin-only: `!ban` (lokal grup), `!hidetag`, `!del`, `!sw`. Owner-only: `!allowgroup`, `!mode`, `!acc`/`!unacc`, `!reset`, `!bansos`, plus AI free-text trigger
 - **Amount parsing:** use `parsePositiveAmount` / `resolveAmount` from `utils/amount.js` (accepts thousand separators `.`/`,`, rejects negative/fraction/hex). Don't hand-roll `parseInt`/regex
 - **Duration parsing:** single parser `parseDuration` in `utils/duration.js` — scheme `s`/`m`/`h`/`d`/`w`/`mo` (`m`=minute, month=`mo`, alias `j` unsupported). Don't write your own duration parser
 - **Interactive buttons:** `sendMenu()`, `quickReply()`, `listButton()` live in **`utils/buttons.js`** (NOT `utils/ui.js` — that one has text-rendering helpers `box`/`section`/`inlineCmd`/`divider`). `BUTTON_MODE=off` falls back to plain text
@@ -105,7 +105,7 @@ Repo has a `.codegraph/` index. Before grep/find when locating or understanding 
 - Duration units in `!ban`/`!allowgroup`: `1h` = 1 HOUR (not a day — use `1d`); `2j` is REJECTED (use `2h`); month = `mo` (not `m`, which is minutes)
 - Version labels drift between files: CHANGELOG says 1.18, `package.json` is still `1.12.0` — don't "fix" version numbers unless asked
 - `OWNER_JID` / `BOT_JID` must be in LID format (`@lid` suffix), not phone number format
-- AI trigger: in PM owner = any free-text; in group = text ending with `.`
+- AI trigger: `handleBot` (fallback terakhir di `HANDLERS`) = free-text OWNER, yaitu body TIDAK berawalan `!`. Di PM owner = langsung (tanpa titik); di grup = wajib akhiran `.`. Non-owner → diabaikan. PM owner + `!unknown` → pesan "sewa bot". `!bot` TIDAK terdaftar di `COMMAND_INDEX`
 - `yt-dlp.exe` is Windows-only; on Termux, yt-dlp is installed via pkg/pip
 - **ffmpeg/ffprobe are root-only** — must be inside the project at **`ffmpeg/bin/`** (level with `index.js`), resolved by `utils/ffmpeg.js`. No fallback to `C:/ffmpeg` or PATH (Windows AND Termux). Windows: run `scripts/install-ffmpeg.bat`. Termux: copy ELF binaries `ffmpeg`/`ffprobe` into `ffmpeg/bin/` + `chmod +x` (do NOT rely on `pkg install ffmpeg`). `getFfmpegParam()` always sends `--ffmpeg-location`
 - `sharp` di Termux/Android tak punya prebuilt native → dipasok via `@img/sharp-wasm32` (sudah di `dependencies`). Jangan build-from-source lagi.
