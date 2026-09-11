@@ -151,6 +151,7 @@ function takeBackup() {
 
 function initDB() {
   if (!fs.existsSync(BACKUP_DIR)) fs.mkdirSync(BACKUP_DIR, { recursive: true });
+  fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 
   cache = loadFromDisk();
   if (!cache) {
