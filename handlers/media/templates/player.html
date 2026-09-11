@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 512px;
+    height: 800px;
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #fff;
+    background: linear-gradient(160deg, #1a1a2e 0%, #16213e 55%, #0f3460 100%);
+    overflow: hidden;
+  }
+  .card { padding: 26px 24px 20px; height: 100%; display: flex; flex-direction: column; }
+  .header { display: flex; align-items: center; justify-content: space-between; }
+  .source { font-size: 15px; letter-spacing: 1.5px; font-weight: 800; opacity: .92; }
+  .source span { color: #7ee787; }
+  .now-playing { font-size: 11px; opacity: .6; letter-spacing: .5px; text-transform: uppercase; }
+
+  .album-row { display: flex; margin-top: 22px; gap: 18px; align-items: center; }
+  .thumb {
+    width: 168px; height: 168px; border-radius: 12px; flex-shrink: 0;
+    background: #223; overflow: hidden; position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+  }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb .ph { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:64px; }
+  .meta { flex: 1; min-width: 0; }
+  .title { font-size: 21px; font-weight: 800; line-height: 1.2; }
+  .artist { font-size: 15px; opacity: .75; font-weight: 500; margin-top: 4px; }
+  .dur { font-size: 12px; opacity: .5; margin-top: 8px; }
+
+  .controls { display: flex; justify-content: center; gap: 26px; margin-top: 22px; align-items: center; }
+  .ctrl { font-size: 22px; opacity: .7; }
+  .ctrl.main { font-size: 40px; opacity: 1; }
+
+  .progress { margin-top: 16px; }
+  .bar { height: 5px; background: rgba(255,255,255,.18); border-radius: 3px; position: relative; }
+  .bar .fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg,#7ee787,#58a6ff); width: 34%; }
+  .bar .knob { position: absolute; top: 50%; left: 34%; transform: translate(-50%,-50%); width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,.6); }
+  .times { display: flex; justify-content: space-between; font-size: 11px; opacity: .65; margin-top: 6px; }
+
+  .lyrics-wrap { margin-top: 20px; flex: 1; min-height: 0; }
+  .ly-header { font-size: 13px; letter-spacing: 1px; font-weight: 800; opacity: .85; margin-bottom: 10px; }
+  .ly-header span { color: #7ee787; }
+  .lyrics { font-size: 15.5px; line-height: 1.7; opacity: .97; white-space: pre-line; overflow: hidden; }
+
+  .footer { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; opacity: .55; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="source"><span>▶</span> YT MUSIC AUDIO</div>
+      <div class="now-playing">NOW PLAYING</div>
+    </div>
+
+    <div class="album-row">
+      <div class="thumb">
+        <img src="{{COVER_SRC}}" alt="">
+        <div class="ph">{{COVER_PH}}</div>
+      </div>
+      <div class="meta">
+        <div class="title">{{TITLE}}</div>
+        <div class="artist">{{ARTIST}}</div>
+        <div class="dur">⏱ {{DURATION}}</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="ctrl">🔀</div>
+      <div class="ctrl">⏮</div>
+      <div class="ctrl main">▶</div>
+      <div class="ctrl">⏭</div>
+      <div class="ctrl">🔁</div>
+    </div>
+
+    <div class="progress">
+      <div class="bar"><div class="fill"></div><div class="knob"></div></div>
+      <div class="times"><span>0:00</span><span>{{DURATION}}</span></div>
+    </div>
+
+    <div class="lyrics-wrap">
+      <div class="ly-header"><span>♪</span> LIRIK</div>
+      <div class="lyrics">{{LYRICS}}</div>
+    </div>
+
+    <div class="footer">
+      <span>🎵 GeminiAI Bot • !playlirik</span>
+      <span>{{DURATION}}</span>
+    </div>
+  </div>
+</body>
+</html>

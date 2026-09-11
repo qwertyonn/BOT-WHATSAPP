@@ -1,0 +1,27 @@
+# Folder berat & sensitif
+node_modules/
+session/
+.env
+
+# Binary / Executable
+*.exe
+
+# File temporary & media
+tmp_*
+.tmp/
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.mp4
+
+# Lockfile & Database internal
+package-lock.json
+state/
+
+# Backup database user
+backups/
+
+# Dokumentasi & preset ffmpeg (bukan bagian dari runtime bot)
+ffmpeg/doc/
+ffmpeg/presets/
